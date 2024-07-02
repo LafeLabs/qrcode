@@ -23,15 +23,14 @@
         <td id = "savebutton" class = "button">SAVE</td>
     </tr>
     <tr>
-        <td>URL:</td>
-        <td><input id = "urlinput"/></td>
-    </tr>
-    <tr>
         <td>BASE URL:</td>
         <td><input id = "baseurlinput"/></td>
     </tr>
+    <tr>
+        <td>LOCAL DIRECTORY NAME:</td>
+        <td><input id = "dirinput"/></td>
+    </tr>
 </table>
-<textarea id = "listinput"></textarea>
 <a id = "linklink"></a>
 <div id = "qrcode"></div>
 
@@ -42,25 +41,34 @@ marginsize = 40;
 fontsize = 12;
 
 //globalurl = "http://www.trashrobot.org/qrcode.html";
-globalurl = window.location.href.split("qrcode.html")[0];
+//globalurl = window.location.href.split("qrcode.html")[0];
 
 
-document.getElementById("urlinput").value = "";
+dirname = "h-bracket";
+baseurl = "https://github.com/lafefspietz/jjiv/tree/main/";
+globalurl = baseurl + dirname;
 
-document.getElementById("urlinput").select();
+document.getElementById("baseurlinput").value = baseurl;
+document.getElementById("dirinput").value = dirname;
+document.getElementById("linklink").href = globalurl;
+document.getElementById("linklink").innerHTML = globalurl;
 
-document.getElementById("urlinput").onchange = function(){
-    globalurl= this.value;
+document.getElementById("dirinput").onchange = function(){
+    dirname = this.value;
+    globalurl = baseurl + dirname;
     qrcode.makeCode(globalurl);
     document.getElementById("linklink").href = globalurl;
     document.getElementById("linklink").innerHTML = globalurl;
-    
 }
 
+document.getElementById("baseurlinput").onchange = function(){
+    baseurl = this.value;
+    globalurl = baseurl + dirname;
+    qrcode.makeCode(globalurl);
+    document.getElementById("linklink").href = globalurl;
+    document.getElementById("linklink").innerHTML = globalurl;
+}
 
-document.getElementById("linklink").href = globalurl;
-document.getElementById("linklink").innerHTML = globalurl;
-document.getElementById("urlinput").value = globalurl;
 
 qrcode = new QRCode(document.getElementById("qrcode"), {
 	text: globalurl,
@@ -76,11 +84,10 @@ document.getElementById("savebutton").onclick = function(){
 //    console.log(qrcodesrc);
     
     var httpc = new XMLHttpRequest();
-    
     var url = "pngsave.php";        
     httpc.open("POST", url, true);
     httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    httpc.send("data="+encodeURIComponent(qrcodesrc.substring(22))+"&filename=images/qrcode.png");//send text to filesaver.php
+    httpc.send("data="+encodeURIComponent(qrcodesrc.substring(22))+"&filename=images/" + dirname + "-qrcode.png");//send text to filesaver.php
      //location.reload(); 
      
      
