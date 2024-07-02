@@ -17,7 +17,6 @@
 <body>    
 
 <a id= "toplink" href = "index.html">HOME</a>
-<a id = "othertoplink" href = "qrcode-page.html">qrcode-page.html</a>
 <table>
     <tr>
         <td id = "savebutton" class = "button">SAVE</td>
@@ -33,6 +32,8 @@
 </table>
 <a id = "linklink"></a>
 <div id = "qrcode"></div>
+
+<div id = "qrcodescroll"></div>
 
 <script>
 
@@ -94,6 +95,27 @@ document.getElementById("savebutton").onclick = function(){
 }
 
 
+
+
+qrcodefiles = [];
+var httpc9 = new XMLHttpRequest();
+    httpc9.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        qrcodefiles = JSON.parse(this.responseText);
+        for(var index = qrcodefiles.length - 1;index >= 0;index--) {
+            var newh = document.createElement("H1");
+            newh.innerHTML = qrcodefiles[index];
+            document.getElementById("qrcodescroll").appendChild(newh);
+            var newimg = document.createElement("IMG");
+            newimg.src = "images/" + qrcodefiles[index];
+            document.getElementById("qrcodescroll").appendChild(newimg);
+        }
+    }
+};
+httpc9.open("GET", "dir.php?filename=images", true);
+httpc9.send();
+
+
 </script>
 <style>
 input{
@@ -119,6 +141,19 @@ canvas,img{
     top:0px;
     font-size:2em;
     
+}
+#qrcodescroll{
+    overflow:scroll;
+    position:absolute;
+    width:25%;
+    right:0px;
+    bottom:0px;
+    top:4em;
+}
+#qrcodescroll img{
+    display:block;
+    margin:auto;
+    max-width:50%;
 }
 .button{
     cursor:pointer;
