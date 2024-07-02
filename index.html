@@ -22,6 +22,9 @@ QR Code Generator using qrcode.js
         <td id = "savebutton" class = "button">SAVE</td>
     </tr>
     <tr>
+        <td id = "savedirs" class = "button">SAVE DIRS</td>
+    </tr>
+    <tr>
         <td>BASE URL:</td>
         <td><input id = "baseurlinput"/></td>
     </tr>
@@ -83,7 +86,6 @@ qrcode = new QRCode(document.getElementById("qrcode"), {
 document.getElementById("savebutton").onclick = function(){
     qrcodesrc = document.getElementById("qrcode").getElementsByTagName("IMG")[0].src;
 //    console.log(qrcodesrc);
-    
     var httpc = new XMLHttpRequest();
     var url = "pngsave.php";        
     httpc.open("POST", url, true);
@@ -93,6 +95,37 @@ document.getElementById("savebutton").onclick = function(){
      
      
 }
+
+
+document.getElementById("savedirs").onclick = function(){
+    savedirs();
+}
+
+function savedirs(){
+    directories = [];
+    var httpc8 = new XMLHttpRequest();
+        httpc8.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            directories = JSON.parse(this.responseText);
+            for(var index = directories.length - 1;index >= 0;index--) {
+                //console.log(directories[index]);
+                dirname = directories[index];
+                globalurl = baseurl + dirname;
+                qrcode.makeCode(globalurl);
+                qrcodesrc = document.getElementById("qrcode").getElementsByTagName("IMG")[0].src;
+            //    console.log(qrcodesrc);
+                var httpc = new XMLHttpRequest();
+                var url = "pngsave.php";        
+                httpc.open("POST", url, true);
+                httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                httpc.send("data="+encodeURIComponent(qrcodesrc.substring(22))+"&filename=" + dirname + "/images/" + dirname + "-qrcode.png");//send text to filesaver.php
+                 //location.reload(); 
+            }
+        }
+    };
+    httpc8.open("GET", "dir.php?type=dir", true);
+    httpc8.send();
+} 
 
 
 
