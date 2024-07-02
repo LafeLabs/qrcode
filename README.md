@@ -1,2 +1,3 @@
-# qrcode
-qrcode generation with javascript
+[index.html](index.html)
+
+![](images/qrcode.png)
