@@ -9,6 +9,8 @@
         "readme.html",
         "readmeeditor.html",
         "replicator.sh",
+        "scroll.html",
+        "table.html",
         "trashmagic.css",
         "trashmagic.js",
         "wall.html",
